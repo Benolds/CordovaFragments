@@ -20,10 +20,13 @@
 package com.webileapps.fragments;
 
 import android.app.FragmentTransaction;
+import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.view.Window;
+import android.view.WindowManager;
 
 public class MainActivity extends FragmentActivity
 {
@@ -31,10 +34,11 @@ public class MainActivity extends FragmentActivity
 
     public CordovaFragment currentFragment;
 
+    public VuforiaFragment vuforiaFragment;
+
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
-
         super.onCreate(savedInstanceState);
 
         //Set status bar color
@@ -42,9 +46,28 @@ public class MainActivity extends FragmentActivity
             getWindow().setStatusBarColor(Color.BLACK);
         }
 
+        prepareWindowForVuforia();
+        vuforiaFragment = new VuforiaFragment();
+
+        FragmentTransaction ft2 = getFragmentManager().beginTransaction();
+        ft2.add(android.R.id.content, vuforiaFragment, VuforiaFragment.TAG);
+        ft2.commit();
+
         currentFragment = new CordovaFragment();
         FragmentTransaction ft = getFragmentManager().beginTransaction();
         ft.add(android.R.id.content, currentFragment);
         ft.commit();
+    }
+
+    private void prepareWindowForVuforia() {
+        //Remove title bar
+        this.requestWindowFeature(Window.FEATURE_NO_TITLE);
+
+        //Remove notification bar
+        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
+        //Force Landscape
+        this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+
     }
 }

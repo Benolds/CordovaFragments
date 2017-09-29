@@ -266,6 +266,17 @@ public class CordovaFragment extends Fragment {
         this.keepRunning = preferences.getBoolean("KeepRunning", true);
 
         appView.loadUrlIntoView(url, true);
+
+        // Must be after loadUrl!
+         makeTransparent(true);
+    }
+
+    public void makeTransparent(boolean isTransparent) {
+        if (isTransparent) {
+            appView.getView().setBackgroundColor(Color.TRANSPARENT);
+        } else {
+            appView.getView().setBackgroundColor(Color.WHITE);
+        }
     }
 
     /**
